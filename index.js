@@ -1,5 +1,3 @@
-const cursor = "<span class=\"cursor\">|</span>";
-
 function insert(screen, key) {
     screen.innerText += key;
     hljs.highlightBlock(screen);
