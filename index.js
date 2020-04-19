@@ -19,6 +19,14 @@ function backspace(screen) {
     remove(screen);
 }
 
+function indent(screen, code) {
+    const first = code.innerText[0]
+    if (first === " ") {
+        type(screen, first + first);
+    } else {
+        type(screen, first);
+    }
+}
 
 function killLeft(screen) {
     let current = screen.innerText;
@@ -269,13 +277,14 @@ const keyPress = (e) => {
 
 const keyDown = (e) => {
     const screen = document.querySelector("#screen");
+    const code   = document.querySelector("#code");
 
     if (e.code === "Backspace") {
         e.preventDefault();
         backspace(screen);
     } else if (e.code === "Tab") {
         e.preventDefault();
-        type(screen, "  ");
+        indent(screen, code);
     }
 };
 
