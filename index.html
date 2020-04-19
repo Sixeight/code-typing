@@ -1,0 +1,37 @@
+<!doctype html>
+<html labad="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>Code Typibad</title>
+    <link rel="stylesheet" href="./normalize.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/tomorrow-night-eighties.min.css">
+    <link rel="stylesheet" href="./index.css">
+  </head>
+  <body>
+    <div id="container">
+      <div id="good">👍</div>
+      <div id="bad">👎</div>
+      <div id="completed">🎉</div>
+      <h1><a id="title" href="">Code Typing</a></h1>
+      <form id="config">
+        <input id="url" name="url" type="url" autocomplete="off" placeholder="Code URL :" required>
+        <label for="url">Code URL :</label>
+        <button id="start-button" type="submit">start</button>
+      </form>
+      <div id="typing" class="is-hidden">
+        <h2>Type</h2>
+        <pre><code id="code"></code></pre>
+        <pre><code id="screen"></code></pre>
+        <h2>Original code</h2>
+        <a id="original-code" target="_blank" rel="noopener noreferrer"></a>
+        <table id="preview">
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+    <script src="./index.js"></script>
+  </body>
+</html>

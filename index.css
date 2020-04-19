@@ -1,0 +1,170 @@
+html * {
+    box-sizing: border-box;
+}
+body {
+    background-color: #333;
+    color: #bbb;
+    font-family: Courier New, SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+code {
+    font-family: Courier New, SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+a {
+    color: #bbb;
+}
+a:visited {
+    color: #888;
+}
+
+h1 a {
+    color: #bbb;
+}
+
+.is-hidden {
+    display: none;
+}
+
+#container {
+    width: 1024px;
+    margin: 10px auto;
+    position: relative;
+}
+
+#good, #bad, #completed {
+    position: absolute;
+    visibility: hidden;
+    font-size: 5em;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    z-index: 1000;
+    top: 70px;
+    font-family: serif;
+}
+.gotonext {
+    animation: gotonext 0.5s ease;
+}
+@keyframes gotonext {
+    0%   { visibility: visible; opacity: 0%;   transform: scale(1);   }
+    10%  { visibility: visible; opacity: 100%; transform: scale(1.5); }
+    70%  { visibility: visible; opacity: 100%; transform: scale(1.5); }
+    100% { visibility: visible; opacity: 0%;   transform: scale(1.5); }
+}
+
+#config {
+   margin-top: 300px;
+   position: relative;;
+   text-align: center;
+}
+#url {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #bbb;
+    outline: 0;
+    background: transparent;
+    color: #bbb;
+    font-size: 1em;
+}
+#config label {
+    position: absolute;
+    display: block;
+    transition: 0.2s;
+    font-size: 0.8em;
+    color: #666;
+    top: -1.5em;
+}
+#url:placeholder-shown ~ label {
+    font-size: 1em;
+    color: #666;
+    top: 0px;
+}
+#url::placeholder {
+    color: transparent;
+}
+#url:focus ~ label {
+    font-size: 0.8em;
+    color: #bbb;
+    top: -1.5em;
+}
+#url:focus {
+    border-color: green;
+}
+#url:invalid {
+    border-color: red;
+}
+#url:invalid:placeholder-shown {
+    border-color: #bbb;
+}
+#start-button {
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #bbb;
+    text-transform: uppercase;
+    font-size: 18px;
+    margin-top: 60px;
+}
+#start-button:disabled {
+    color: #666;
+}
+
+#code, #screen {
+    width: 100%;
+    position: relative;
+    display: block;
+    font-size: 1.3em;
+    line-height: 1.3em;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    min-height: 1.3em;
+}
+#code:after {
+    content: "\023CE";
+    font-size: 0.5em;
+    color: #666;
+    line-height: 1.3em;
+}
+#screen:after {
+    content:"|";
+    font-size: 1em;
+    line-height: 1.3em;
+    color: #666;
+    font-weight: bold;
+}
+#preview {
+    font-size: 0.8em;
+    line-height: 1.2em;
+    border-spacing: 0;
+    border-collapse: collapse;
+    margin: 0 auto;
+    margin-top: 1em;
+}
+#preview tr {
+    position: relative;
+}
+#preview tr:first-child .line-number,
+#preview tr:first-child .source {
+    padding-top: 1em;
+}
+#preview .line-number {
+    position: absolute;
+    text-align: right;
+    cursor: pointer;
+    padding-right: 8px;
+    user-select: none;
+    color: #888;
+    width: 5em;
+    left: -5em;
+}
+#preview .source {
+    width: 1024px;
+    background-color: #2d2d2d;
+}
+#preview pre {
+    margin: 0;
+    padding: 0;
+}
+#preview code {
+    padding: 0 1em;
+}
