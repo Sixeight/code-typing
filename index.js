@@ -203,6 +203,9 @@ function updateCode(screen, code) {
     code.innerText = lines[line++] || "";
     code.setAttribute("data-line-number", line);
     hljs.highlightBlock(code);
+
+    const info = document.querySelector("#info > .line");
+    info.innerText = `${line}/${lines.length}`
 }
 
 function check(screen, code) {
@@ -227,6 +230,9 @@ function good() {
     setTimeout(() => {
         good.classList.add('gotonext');
     }, 0);
+
+    goodCount += 1;
+    updatePoint();
 }
 
 function bad() {
@@ -235,6 +241,9 @@ function bad() {
     setTimeout(() => {
         bad.classList.add('gotonext');
     }, 0);
+
+    badCount += 1;
+    updatePoint();
 }
 
 function completed() {
@@ -288,14 +297,45 @@ const keyDown = (e) => {
     }
 };
 
+let goodCount = 0;
+let badCount  = 0;
+let interval  = null;
+let startTime = null;
 function start() {
     document.addEventListener("keypress", keyPress);
     document.addEventListener("keydown", keyDown);
+
+    goodCount = 0;
+    badCount  = 0;
+    updatePoint();
+
+    const time = document.querySelector("#info > .time")
+    time.innerText = "0";
+    startTime = new Date().getTime();
+    interval = setInterval(() => {
+        const current = new Date().getTime();
+        const diff = current - startTime;
+        const seconds = Math.floor(diff / 1000);
+        const s = seconds % 60;
+        time.innerText = `${s}`;
+    }, 1000);
 }
 
 function stop() {
     document.removeEventListener("keypress", keyPress);
     document.removeEventListener("keydown", keyDown);
+
+    if (interval !== null) {
+        clearInterval(interval);
+    }
+}
+
+function updatePoint() {
+    const good = document.querySelector("#info > .good");
+    const bad  = document.querySelector("#info > .bad");
+
+    good.innerText = "" + goodCount;
+    bad.innerText  = "" + badCount;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
