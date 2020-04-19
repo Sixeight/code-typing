@@ -75,7 +75,7 @@ let lines = [];
 let line  = -1;
 
 function isLastLine() {
-    return line === lines.length - 1;
+    return line === lines.length;
 }
 
 const extToLang = {
@@ -93,6 +93,7 @@ const extToLang = {
     scss: "scss",
     c: "c",
     cpp: "cpp",
+    go: "go",
 };
 
 function highlightAuto(url, body) {
@@ -116,9 +117,12 @@ async function initialize(screen, code, initialURL, initialLine) {
     }
     url = initialURL
 
-    const body = await fetchCode(url)
+    let body = await fetchCode(url)
+    if (body[body.length - 1] === "\n") {
+        body = body.substring(0, body.length - 1);
+    }
     lines = body.split("\n");
-    line  = initialLine;
+    line  = initialLine - 0;
 
     const highlighted = highlightAuto(url, body);
     code.className = "";
@@ -162,6 +166,12 @@ async function initialize(screen, code, initialURL, initialLine) {
     typingMode();
 }
 
+function previous(screen, code) {
+    line = Math.max(0, line - 2);
+    window.history.pushState({}, "", `?url=${encodeURIComponent(url)}&line=${line}`);
+    updateCode(screen, code);
+}
+
 function next(screen, code) {
     window.history.pushState({}, "", `?url=${encodeURIComponent(url)}&line=${line}`);
     updateCode(screen, code);
@@ -169,6 +179,19 @@ function next(screen, code) {
 
 function updateCode(screen, code) {
     clear(screen);
+
+    if (line >= lines.length) {
+        line = lines.length - 1;
+    }
+
+    document.querySelectorAll("#preview .line-number").forEach(item => {
+        item.classList.remove("current");
+        const num = item.innerText - 0;
+        if ((line + 1) === num) {
+            item.classList.add("current");
+        }
+    });
+
     code.innerText = lines[line++] || "";
     code.setAttribute("data-line-number", line);
     hljs.highlightBlock(code);
@@ -226,8 +249,12 @@ const keyPress = (e) => {
     if (e.ctrlKey) {
         if (e.code === "KeyH") {
             backspace(screen);
-        } else if (e.key === "w") {
+        } else if (e.code === "KeyW") {
             killLeft(screen);
+        } else if (e.code === "KeyP") {
+            previous(screen, code);
+        } else if (e.code === "KeyN") {
+            next(screen, code);
         }
         return;
     } else if (e.code === "Enter") {
@@ -293,6 +320,14 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         window.history.pushState({}, "", "index.html");
         configMode();
+    });
+
+    const preview = document.querySelector("#preview");
+    preview.addEventListener("click", (e) => {
+        if (e.target && e.target.classList.contains("line-number")) {
+            line = (0 + e.target.innerText) - 1;
+            next(screen, code);
+        }
     });
 
     const currentURL = new URL(window.location.href);

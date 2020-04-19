@@ -42,6 +42,9 @@ h1 a {
     top: 70px;
     font-family: serif;
 }
+#completed {
+    top: 300px;
+}
 .gotonext {
     animation: gotonext 0.5s ease;
 }
@@ -143,10 +146,6 @@ h1 a {
 #preview tr {
     position: relative;
 }
-#preview tr:first-child .line-number,
-#preview tr:first-child .source {
-    padding-top: 1em;
-}
 #preview .line-number {
     position: absolute;
     text-align: right;
@@ -156,6 +155,13 @@ h1 a {
     color: #888;
     width: 5em;
     left: -5em;
+}
+#preview .line-number.current {
+    color: #bbb;
+    font-weight: bold;
+}
+#preview .line-number.current ~ td {
+    background-color: #3f3f2f;
 }
 #preview .source {
     width: 1024px;
