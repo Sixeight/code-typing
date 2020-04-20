@@ -161,7 +161,7 @@ h1 a {
     50%  { opacity: 0%;   }
     100% { opacity: 0%;   }
 }
-#play-space {
+#curent-line {
     position: relative;
 }
 #code-pre, #screen-pre {
