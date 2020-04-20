@@ -21,11 +21,10 @@ function indent(screen, code) {
     const first = code.innerText[0]
     if (first === " ") {
         type(screen, first + first);
-    } else if (first === undefined) {
-        // DO nothing
-    } else {
+    } else if (first === "	") {
         type(screen, first);
     }
+    // Do not nothing
 }
 
 function killLeft(screen) {
