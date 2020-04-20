@@ -21,6 +21,8 @@ function indent(screen, code) {
     const first = code.innerText[0]
     if (first === " ") {
         type(screen, first + first);
+    } else if (first === undefined) {
+        // DO nothing
     } else {
         type(screen, first);
     }
