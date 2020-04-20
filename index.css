@@ -153,6 +153,15 @@ h1 a {
     color: #666;
     font-weight: bold;
 }
+.stop #screen:after {
+    animation: cursor 0.5s linear alternate infinite;
+}
+@keyframes cursor {
+    0%   { opacity: 100%; }
+    49%  { opacity: 100%; }
+    50%  { opacity: 0%;   }
+    100% { opacity: 0%;   }
+}
 #preview {
     width: 1024px;
     font-size: 0.8em;

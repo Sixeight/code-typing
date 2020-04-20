@@ -9,8 +9,22 @@ function remove(screen) {
     hljs.highlightBlock(screen);
 }
 
+let typingTimer = null;
 function type(screen, key) {
     insert(screen, key);
+
+    const parent = screen.parentElement;
+    if (parent !== null) {
+        if (typingTimer) {
+            clearTimeout(typingTimer);
+        }
+        parent.classList.remove("stop");
+        parent.classList.add("typing");
+        typingTimer = setTimeout(() => {
+            parent.classList.remove("typing");
+            parent.classList.add("stop");
+        }, 300);
+    }
 }
 
 function backspace(screen) {
