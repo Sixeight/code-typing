@@ -216,13 +216,13 @@ function updatePreview(selector, previewLines, startLineNumber) {
 
 function previous(screen, code) {
     line = Math.max(0, line - 1);
-    window.history.pushState({}, "", `?url=${encodeURIComponent(url)}&line=${line}`);
+    window.history.pushState({}, "", `?url=${encodeURIComponent(url)}&line=${line + 1}`);
     updateCode(screen, code);
 }
 
 function next(screen, code) {
     line = Math.min(lines.length - 1, line + 1);
-    window.history.pushState({}, "", `?url=${encodeURIComponent(url)}&line=${line}`);
+    window.history.pushState({}, "", `?url=${encodeURIComponent(url)}&line=${line + 1}`);
     updateCode(screen, code);
 }
 
@@ -462,7 +462,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const params = currentURL.searchParams;
     const url = params.get("url");
     if (url !== null) {
-        const line = params.get("line") || 0;
+        const line = (params.get("line") || 1) - 1;
         initialize(screen, code, url, line).catch(e => {
             console.log(e);
             input.value = url;
@@ -490,7 +490,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const nextLine = params.get("line") || 0;
+        const nextLine = (params.get("line") || 1) - 1;
 
         if (url !== nextURL) {
             initialize(screen, code, nextURL, nextLine).catch(() => {
