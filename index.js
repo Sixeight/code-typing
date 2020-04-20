@@ -133,10 +133,11 @@ async function initialize(screen, code, initialURL, initialLine) {
     line  = initialLine - 0;
 
     const highlighted = highlightAuto(url, body);
+    const language = highlighted.language || "plaintext";
     code.className = "";
-    code.classList.add(highlighted.language);
+    code.classList.add(language);
     screen.className = "";
-    screen.classList.add(highlighted.language);
+    screen.classList.add(language);
 
     const preview = document.querySelector("#preview tbody");
     preview.innerText = "";
