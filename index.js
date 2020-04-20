@@ -314,8 +314,7 @@ function start() {
         const current = new Date().getTime();
         const diff = current - startTime;
         const seconds = Math.floor(diff / 1000);
-        const s = seconds % 60;
-        time.innerText = `${s}`;
+        time.innerText = `${seconds}`;
     }, 1000);
 }
 
