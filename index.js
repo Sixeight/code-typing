@@ -282,10 +282,10 @@ function check(screen, code) {
 
 function good() {
     const good = document.querySelector("#good");
-    good.classList.remove('gotonext');
+    good.classList.remove("gotonext");
     setTimeout(() => {
-        good.classList.add('gotonext');
-    }, 0);
+        good.classList.add("gotonext");
+    }, 100);
 
     goodCount += 1;
     updatePoint();
@@ -293,10 +293,10 @@ function good() {
 
 function bad() {
     const bad = document.querySelector("#bad");
-    bad.classList.remove('gotonext');
+    bad.classList.remove("gotonext")
     setTimeout(() => {
-        bad.classList.add('gotonext');
-    }, 0);
+        bad.classList.add("gotonext");
+    }, 100);
 
     badCount += 1;
     updatePoint();
@@ -304,9 +304,9 @@ function bad() {
 
 function completed() {
     const completed = document.querySelector("#completed");
-    completed.classList.remove('gotonext');
+    completed.classList.remove("gotonext");
     setTimeout(() => {
-        completed.classList.add('gotonext');
+        completed.classList.add("gotonext");
     }, 0);
 
     window.history.pushState({}, "", "index.html");
