@@ -94,6 +94,7 @@ function configMode() {
 let url   = null;
 let lines = [];
 let line  = -1;
+let highlightLines = [];
 
 function isLastLine() {
     return line === lines.length;
@@ -152,11 +153,29 @@ async function initialize(screen, code, initialURL, initialLine) {
     screen.className = "";
     screen.classList.add(language);
 
-    const preview = document.querySelector("#preview tbody");
+    highlightLines = highlighted.value.split("\n")
+    updatePreview("#original", highlightLines, 1);
+
+    next(screen, code);
+
+    const original = document.querySelector("#original-code");
+    original.setAttribute("href", url);
+    original.innerText = url;
+
+    typingMode();
+}
+
+function updatePreview(selector, previewLines, startLineNumber, lack) {
+    const preview = document.querySelector(`${selector} tbody`);
+    if (lack || false) {
+        preview.classList.add("lack");
+    } else {
+        preview.classList.remove("lack");
+    }
     preview.innerText = "";
     const fragment = document.createDocumentFragment();
-    let i = 1;
-    highlighted.value.split("\n").forEach(l => {
+    let i = startLineNumber;
+    previewLines.forEach(l => {
         const tr = document.createElement('tr');
         const ln = document.createElement('td');
         {
@@ -178,14 +197,6 @@ async function initialize(screen, code, initialURL, initialLine) {
         i++;
     });
     preview.appendChild(fragment);
-
-    next(screen, code);
-
-    const original = document.querySelector("#original-code");
-    original.setAttribute("href", url);
-    original.innerText = url;
-
-    typingMode();
 }
 
 function previous(screen, code) {
@@ -206,7 +217,7 @@ function updateCode(screen, code) {
         line = lines.length - 1;
     }
 
-    document.querySelectorAll("#preview .line-number").forEach(item => {
+    document.querySelectorAll("#original .line-number").forEach(item => {
         item.classList.remove("current");
         const num = item.innerText - 0;
         if ((line + 1) === num) {
@@ -214,8 +225,39 @@ function updateCode(screen, code) {
         }
     });
 
+    if (line > 0) {
+        const start = Math.max(line - 2, 0);
+        const beforeLines = highlightLines
+            .slice(start, line)
+            .map(l => l === "" ? " " : l);
+        updatePreview(
+            "#code-before",
+            beforeLines,
+            start + 1,
+            beforeLines.length < 2
+        );
+    } else {
+        updatePreview("#code-before", [], 0);
+    }
+    if (!isLastLine()) {
+        const end = Math.min(line + 3, highlightLines.length)
+        const afterLines = highlightLines
+            .slice(line + 1, end)
+            .map(l => l === "" ? " " : l);
+        updatePreview(
+            "#code-after",
+            afterLines,
+            line + 2,
+            afterLines.length < 2
+        );
+    } else {
+        updatePreview("#code-after", [], line.length);
+    }
+
     code.innerText = lines[line++] || "";
-    code.setAttribute("data-line-number", line);
+    if (code.parentElement !== null) {
+        code.parentElement.setAttribute("data-line-number", line);
+    }
     hljs.highlightBlock(code);
 
     const info = document.querySelector("#info > .line");
@@ -393,7 +435,7 @@ document.addEventListener("DOMContentLoaded", () => {
         configMode();
     });
 
-    const preview = document.querySelector("#preview");
+    const preview = document.querySelector("#original");
     preview.addEventListener("click", (e) => {
         if (e.target && e.target.classList.contains("line-number")) {
             line = (0 + e.target.innerText) - 1;

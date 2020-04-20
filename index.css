@@ -9,10 +9,9 @@ html * {
 body {
     background-color: #333;
     color: #bbb;
-    font-family: Courier New, SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
 }
 
-code {
+body, code, pre {
     font-family: Courier New, SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
 }
 
@@ -162,7 +161,37 @@ h1 a {
     50%  { opacity: 0%;   }
     100% { opacity: 0%;   }
 }
-#preview {
+#play-space {
+    position: relative;
+}
+#code-pre, #screen-pre {
+    margin: 0;
+    width: 1024px;
+}
+#code-pre code, #screen-pre code {
+     background-color: #2d2d2d;
+}
+#code-pre {
+    position: absolute;
+}
+#screen-pre {
+    opacity: 60%;
+}
+#code-pre:before {
+    content: attr(data-line-number);
+    display: block;
+    position: absolute;
+    text-align: right;
+    width: 5em;
+    left: -6em;
+    color: #bbb;
+    font-weight: bold;
+    font-size: 1.3em;
+    line-height: 2.3em;;
+    padding: 0 0.5em;
+}
+
+.preview {
     width: 1024px;
     font-size: 0.8em;
     line-height: 1.2em;
@@ -171,10 +200,10 @@ h1 a {
     margin: 0 auto;
     margin-top: 1em;
 }
-#preview tr {
+.preview tr {
     position: relative;
 }
-#preview .line-number {
+.preview .line-number {
     position: absolute;
     text-align: right;
     cursor: pointer;
@@ -184,22 +213,57 @@ h1 a {
     width: 5em;
     left: -5em;
 }
-#preview .line-number.current {
+.preview .line-number.current {
     color: #bbb;
     font-weight: bold;
 }
-#preview .line-number.current ~ td {
+.preview .line-number.current ~ td {
     background-color: #3f3f2f;
 }
-#preview .source {
+.preview .source {
     background-color: #2d2d2d;
 }
-#preview pre {
+.preview pre {
     margin: 0;
     padding: 0;
 }
-#preview code {
+.preview code {
     padding: 0 1em;
+}
+
+#code-before, #code-after {
+    line-height: 1.3em;
+    font-size: 1.3em;
+    margin: 0;
+}
+#code-before tr:nth-child(1) {
+    opacity: 20%;
+}
+#code-before .lack tr:nth-child(1) {
+    opacity: 40%;
+}
+#code-before tr:nth-child(2) {
+    opacity: 40%;
+}
+#code-after tr:nth-child(1) {
+    opacity: 40%;
+}
+#code-after tr:nth-child(2) {
+    opacity: 20%;
+}
+#code-before pre, #code-after pre {
+    margin: inherit;
+    padding: inherit;
+}
+#code-before code, #code-after code {
+    display: block;
+    padding: 0 0.5em;
+}
+#code-before .line-number,
+#code-after .line-number {
+    line-height: 1.3em;
+    padding: 0 0.5em;
+    cursor: default;
 }
 
 footer {

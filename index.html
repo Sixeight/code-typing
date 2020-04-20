@@ -25,12 +25,22 @@
       <div id="typing" class="is-hidden">
         <h2>Type</h2>
         <p id="info">Line:<span class="line"></span> Good:<span class="good">0</span> Bad:<span class="bad">0</span> Time:<span class="time">00:00</span></p>
-        <pre><code id="code"></code></pre>
-        <pre class="stop"><code id="screen"></code></pre>
+        <table id="code-before" class="preview">
+          <tbody>
+          </tbody>
+        </table>
+        <div id="play-space">
+          <pre id="code-pre"><code id="code"></code></pre>
+          <pre id="screen-pre" class="stop"><code id="screen"></code></pre>
+        </div>
+        <table id="code-after" class="preview">
+          <tbody>
+          </tbody>
+        </table>
 
         <h2>Original code</h2>
         <a id="original-code" target="_blank" rel="noopener noreferrer"></a>
-        <table id="preview">
+        <table id="original" class="preview">
           <tbody>
           </tbody>
         </table>
