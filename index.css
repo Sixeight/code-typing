@@ -237,19 +237,16 @@ h1 a {
     margin: 0;
 }
 #code-before tr:nth-child(1) {
-    opacity: 20%;
-}
-#code-before .lack tr:nth-child(1) {
-    opacity: 40%;
+    opacity: 10%;
 }
 #code-before tr:nth-child(2) {
-    opacity: 40%;
+    opacity: 30%;
 }
 #code-after tr:nth-child(1) {
-    opacity: 40%;
+    opacity: 30%;
 }
 #code-after tr:nth-child(2) {
-    opacity: 20%;
+    opacity: 10%;
 }
 #code-before pre, #code-after pre {
     margin: inherit;
