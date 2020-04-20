@@ -391,6 +391,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    document.addEventListener("paste", (e) => {
+        e.preventDefault();
+
+        const pasteData = (event.clipboardData || window.clipboardData).getData('text');
+        if (/^https?:\/\//.test(pasteData)) {
+            input.value = pasteData;
+            input.focus();
+        }
+    });
+
     window.addEventListener("popstate", () => {
         const currentURL = new URL(window.location.href);
         const params = currentURL.searchParams;
