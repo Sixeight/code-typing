@@ -31,6 +31,17 @@ h1 a {
     display: none;
 }
 
+.github:before {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5em;
+    width: 16px;
+    height: 16px;
+    background-image: url(image/GitHub-Mark-Light-32px.png);
+    background-size: contain;
+}
+
 #container {
     width: 1024px;
     margin: 10px auto;
@@ -63,6 +74,7 @@ h1 a {
 
 #config {
    margin-top: 300px;
+   margin-bottom: 100px;
    position: relative;;
    text-align: center;
 }
@@ -179,4 +191,9 @@ h1 a {
 }
 #preview code {
     padding: 0 1em;
+}
+
+footer {
+    margin-top: 1em;
+    text-align: right;
 }
