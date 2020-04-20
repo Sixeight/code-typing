@@ -310,13 +310,22 @@ function start() {
     updatePoint();
 
     const time = document.querySelector("#info > .time")
-    time.innerText = "0";
+    time.innerText = "00:00";
     startTime = new Date().getTime();
+    function pad(i) {
+        let str = "" + i;
+        if (str.length < 2) {
+            str = "0" + str;
+        }
+        return str;
+    }
     interval = setInterval(() => {
         const current = new Date().getTime();
         const diff = current - startTime;
         const seconds = Math.floor(diff / 1000);
-        time.innerText = `${seconds}`;
+        const m = Math.floor(seconds / 60)
+        const s = seconds % 60;
+        time.innerText = `${pad(m)}:${pad(s)}`;
     }, 1000);
 }
 
