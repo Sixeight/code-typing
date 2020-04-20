@@ -165,13 +165,8 @@ async function initialize(screen, code, initialURL, initialLine) {
     typingMode();
 }
 
-function updatePreview(selector, previewLines, startLineNumber, lack) {
+function updatePreview(selector, previewLines, startLineNumber) {
     const preview = document.querySelector(`${selector} tbody`);
-    if (lack || false) {
-        preview.classList.add("lack");
-    } else {
-        preview.classList.remove("lack");
-    }
     preview.innerText = "";
     const fragment = document.createDocumentFragment();
     let i = startLineNumber;
@@ -180,14 +175,16 @@ function updatePreview(selector, previewLines, startLineNumber, lack) {
         const ln = document.createElement('td');
         {
             ln.classList.add('line-number');
-            ln.innerText = i;
+            if (l !== null) {
+                ln.innerText = i;
+            }
         }
         const cd = document.createElement('td');
         {
             cd.classList.add('source');
             const pre = document.createElement('pre');
             const code = document.createElement('code');
-            code.innerHTML = l;
+            code.innerHTML = l || " ";
             pre.appendChild(code);
             cd.appendChild(pre);
         }
@@ -225,33 +222,33 @@ function updateCode(screen, code) {
         }
     });
 
-    if (line > 0) {
+    {
         const start = Math.max(line - 2, 0);
         const beforeLines = highlightLines
             .slice(start, line)
             .map(l => l === "" ? " " : l);
+        const diff = 2 - beforeLines.length;
         updatePreview(
             "#code-before",
-            beforeLines,
-            start + 1,
-            beforeLines.length < 2
+            (diff <= 0) ?
+                beforeLines :
+                Array(diff).fill(null, 0, diff).concat(beforeLines),
+            line - 1
         );
-    } else {
-        updatePreview("#code-before", [], 0);
     }
-    if (!isLastLine()) {
+    {
         const end = Math.min(line + 3, highlightLines.length)
         const afterLines = highlightLines
             .slice(line + 1, end)
             .map(l => l === "" ? " " : l);
+        const diff = 2 - afterLines.length;
         updatePreview(
             "#code-after",
-            afterLines,
-            line + 2,
-            afterLines.length < 2
+            (diff <= 0) ?
+                afterLines :
+                afterLines.concat(Array(diff).fill(null, 0, diff)),
+            line + 2
         );
-    } else {
-        updatePreview("#code-after", [], line.length);
     }
 
     code.innerText = lines[line++] || "";
