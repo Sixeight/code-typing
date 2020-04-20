@@ -1,12 +1,17 @@
+let buffer = "";
 function insert(screen, key) {
-    screen.innerText += key;
-    hljs.highlightBlock(screen);
+    buffer += key;
+    updateScreen(screen, buffer);
 }
 
 function remove(screen) {
-    const current = screen.innerText;
-    screen.innerText = current.substring(0, current.length - 1);
-    hljs.highlightBlock(screen);
+    buffer = buffer.substring(0, buffer.length - 1)
+    updateScreen(screen, buffer);
+}
+
+function updateScreen(screen, newLine) {
+    const highlightedLine = highlightedNewLine(lines, line, newLine, language);
+    screen.innerHTML = highlightedLine;
 }
 
 let typingTimer = null;
@@ -42,19 +47,19 @@ function indent(screen, code) {
 }
 
 function killLeft(screen) {
-    let current = screen.innerText;
+    let current = buffer;
     while (current[current.length - 1] === " ") {
         current = current.substring(0, current.length - 2);
     }
     const parts = current.split(/\b/);
     const lastPart = parts[parts.length - 1];
-    screen.innerText = current.substring(0, current.length - lastPart.length);
-    hljs.highlightBlock(screen);
+    buffer = current.substring(0, current.length - lastPart.length);
+    updateScreen(screen, buffer);
 }
 
 function clear(screen) {
-    screen.innerText = "";
-    hljs.highlightBlock(screen);
+    buffer = "";
+    updateScreen(screen, buffer);
 }
 
 async function fetchCode(url) {
@@ -95,6 +100,7 @@ let url   = null;
 let lines = [];
 let line  = -1;
 let highlightLines = [];
+let language = [];
 
 function isLastLine() {
     return line === lines.length;
@@ -118,7 +124,7 @@ const extToLang = {
     go: "go",
 };
 
-function highlightAuto(url, body) {
+function highlightAutoWithURL(url, body) {
     let language = "";
     const extLine = url.lastIndexOf(".");
     if (extLine !== -1) {
@@ -128,7 +134,19 @@ function highlightAuto(url, body) {
             language = lang;
         }
     }
+    return highlightAuto(body, language);
+}
+
+function highlightAuto(body, language) {
     return hljs.highlightAuto(body, [language]);
+}
+
+function highlightedNewLine(lines, line, newLine, language) {
+    const copy = lines.concat();
+    copy[line] = newLine;
+    const highlighted = highlightAuto(copy.join("\n"), language);
+    const newLines = highlighted.value.split("\n");
+    return newLines[line];
 }
 
 async function initialize(screen, code, initialURL, initialLine) {
@@ -144,10 +162,10 @@ async function initialize(screen, code, initialURL, initialLine) {
         body = body.substring(0, body.length - 1);
     }
     lines = body.split("\n");
-    line  = initialLine - 0;
+    line  = initialLine - 1;
 
-    const highlighted = highlightAuto(url, body);
-    const language = highlighted.language || "plaintext";
+    const highlighted = highlightAutoWithURL(url, body);
+    language = highlighted.language || "plaintext";
     code.className = "";
     code.classList.add(language);
     screen.className = "";
@@ -197,12 +215,13 @@ function updatePreview(selector, previewLines, startLineNumber) {
 }
 
 function previous(screen, code) {
-    line = Math.max(0, line - 2);
+    line = Math.max(0, line - 1);
     window.history.pushState({}, "", `?url=${encodeURIComponent(url)}&line=${line}`);
     updateCode(screen, code);
 }
 
 function next(screen, code) {
+    line = Math.min(lines.length - 1, line + 1);
     window.history.pushState({}, "", `?url=${encodeURIComponent(url)}&line=${line}`);
     updateCode(screen, code);
 }
@@ -251,19 +270,18 @@ function updateCode(screen, code) {
         );
     }
 
-    code.innerText = lines[line++] || "";
+    code.innerHTML = highlightLines[line] || "";
     if (code.parentElement !== null) {
-        code.parentElement.setAttribute("data-line-number", line);
+        code.parentElement.setAttribute("data-line-number", line + 1);
     }
-    hljs.highlightBlock(code);
 
     const info = document.querySelector("#info > .line");
-    info.innerText = `${line}/${lines.length}`
+    info.innerText = `${line + 1}/${lines.length}`
 }
 
 function check(screen, code) {
-    const typed  = screen.innerText;
-    const source = code.innerText;
+    const typed  = buffer;
+    const source = lines[line];
     if (typed === source) {
         if (isLastLine()) {
             completed();
@@ -435,7 +453,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const preview = document.querySelector("#original");
     preview.addEventListener("click", (e) => {
         if (e.target && e.target.classList.contains("line-number")) {
-            line = (0 + e.target.innerText) - 1;
+            line = (0 + e.target.innerText) - 2;
             next(screen, code);
         }
     });
