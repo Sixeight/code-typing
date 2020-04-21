@@ -162,7 +162,7 @@ async function initialize(screen, code, initialURL, initialLine) {
         body = body.substring(0, body.length - 1);
     }
     lines = body.split("\n");
-    line  = initialLine - 1;
+    line  = Math.min(Math.max(initialLine, 0), lines.length - 1) - 1;
 
     const highlighted = highlightAutoWithURL(url, body);
     language = highlighted.language || "plaintext";
