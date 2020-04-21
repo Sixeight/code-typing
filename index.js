@@ -172,7 +172,6 @@ async function initialize(screen, code, initialURL, initialLine) {
     screen.classList.add(language);
 
     highlightLines = highlighted.value.split("\n")
-    updatePreview("#original", highlightLines, 1);
 
     next(screen, code);
 
@@ -233,14 +232,6 @@ function updateCode(screen, code) {
         line = lines.length - 1;
     }
 
-    document.querySelectorAll("#original .line-number").forEach(item => {
-        item.classList.remove("current");
-        const num = item.innerText - 0;
-        if ((line + 1) === num) {
-            item.classList.add("current");
-        }
-    });
-
     {
         const start = Math.max(line - 2, 0);
         const beforeLines = highlightLines
@@ -268,6 +259,20 @@ function updateCode(screen, code) {
                 afterLines.concat(Array(diff).fill(null, 0, diff)),
             line + 2
         );
+    }
+
+    {
+        const start = Math.max(0, line - 10);
+        const previewLines = highlightLines.slice(start)
+        updatePreview("#original", previewLines, start + 1);
+
+        document.querySelectorAll("#original .line-number").forEach(item => {
+            item.classList.remove("current");
+            const num = item.innerText - 0;
+            if ((line + 1) === num) {
+                item.classList.add("current");
+            }
+        });
     }
 
     code.innerHTML = highlightLines[line] || "";
