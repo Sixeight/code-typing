@@ -103,7 +103,7 @@ let highlightLines = [];
 let language = [];
 
 function isLastLine() {
-    return line === lines.length;
+    return line === lines.length - 1;
 }
 
 const extToLang = {
